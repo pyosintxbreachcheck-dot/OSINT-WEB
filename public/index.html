@@ -9,81 +9,61 @@
 </head>
 <body>
 
-    <!-- AUTH SCREENS (Improved UI) -->
+    <!-- AUTH SCREEN -->
     <div id="auth-screen" class="auth-screen active">
+        <div class="auth-container">
+            <div class="auth-card">
 
-        <!-- Login Screen -->
-        <div id="login-screen" class="auth-page active">
-            <div class="auth-container">
-                <div class="auth-card">
-                    <div class="logo">
-                        <i class="fas fa-shield-alt"></i>
-                        <h1>OSINTX AI</h1>
-                    </div>
-                    <p class="tagline">Advanced Phone Intelligence Platform</p>
-                    
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <h1>OSINTX AI</h1>
+                </div>
+                <p class="tagline">Advanced Phone Intelligence Platform</p>
+
+                <!-- Login Form -->
+                <div id="login-form" class="auth-form active">
                     <h2>Welcome Back</h2>
                     <div class="input-group">
                         <label>Email</label>
-                        <input type="email" id="login-email" placeholder="you@example.com" required>
+                        <input type="email" id="login-email" placeholder="you@example.com">
                     </div>
                     <div class="input-group">
                         <label>Password</label>
-                        <input type="password" id="login-password" placeholder="••••••••" required>
+                        <input type="password" id="login-password" placeholder="••••••••">
                     </div>
-                    
                     <button onclick="login()" class="btn-primary">LOGIN SECURELY</button>
-                    
-                    <p class="switch-auth">
-                        Don't have an account? 
-                        <span onclick="showSignup()">Sign Up</span>
-                    </p>
+                    <p class="switch-auth">Don't have an account? <span onclick="switchToSignup()">Sign up</span></p>
                 </div>
-            </div>
-        </div>
 
-        <!-- Signup Screen -->
-        <div id="signup-screen" class="auth-page">
-            <div class="auth-container">
-                <div class="auth-card">
-                    <div class="logo">
-                        <i class="fas fa-shield-alt"></i>
-                        <h1>OSINTX AI</h1>
-                    </div>
-                    <p class="tagline">Advanced Phone Intelligence Platform</p>
-                    
-                    <h2>Create New Account</h2>
+                <!-- Signup Form -->
+                <div id="signup-form" class="auth-form">
+                    <h2>Create Account</h2>
                     <div class="input-group">
                         <label>Full Name</label>
-                        <input type="text" id="signup-name" placeholder="John Doe" required>
+                        <input type="text" id="signup-name" placeholder="John Doe">
                     </div>
                     <div class="input-group">
                         <label>Email</label>
-                        <input type="email" id="signup-email" placeholder="you@example.com" required>
+                        <input type="email" id="signup-email" placeholder="you@example.com">
                     </div>
                     <div class="input-group">
                         <label>Password</label>
-                        <input type="password" id="signup-password" placeholder="••••••••" required>
+                        <input type="password" id="signup-password" placeholder="••••••••">
                     </div>
                     <div class="input-group">
                         <label>Confirm Password</label>
-                        <input type="password" id="signup-confirm" placeholder="••••••••" required>
+                        <input type="password" id="signup-confirm" placeholder="••••••••">
                     </div>
-                    
                     <button onclick="signup()" class="btn-primary">CREATE ACCOUNT</button>
-                    
-                    <p class="switch-auth">
-                        Already have an account? 
-                        <span onclick="showLogin()">Login</span>
-                    </p>
+                    <p class="switch-auth">Already have an account? <span onclick="switchToLogin()">Login</span></p>
                 </div>
+
             </div>
         </div>
     </div>
 
     <!-- MAIN APP -->
     <div id="main-app" class="main-app hidden">
-        <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
@@ -96,14 +76,11 @@
                     <i class="fas fa-search"></i> Phone Search
                 </a>
             </nav>
-            <div class="sidebar-footer">
-                <button onclick="logout()" class="btn-logout">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-            </div>
+            <button onclick="logout()" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
         </div>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="top-nav">
                 <div class="user-info">
@@ -115,14 +92,10 @@
             <!-- Search Section -->
             <div id="search-section" class="content-section active">
                 <h1 class="page-title">Phone Number Intelligence</h1>
-                
                 <div class="search-input-container">
                     <div class="input-wrapper">
-                        <input type="tel" id="phone-input" maxlength="10" 
-                               placeholder="Enter 10-digit Indian mobile number">
-                        <button onclick="analyzeNumber()" class="btn-analyze">
-                            <i class="fas fa-search"></i> ANALYZE
-                        </button>
+                        <input type="tel" id="phone-input" maxlength="10" placeholder="Enter 10-digit Indian mobile number">
+                        <button onclick="analyzeNumber()" class="btn-analyze">ANALYZE NUMBER</button>
                     </div>
                 </div>
 
@@ -142,12 +115,12 @@
         </div>
     </div>
 
-    <!-- Toast & Modal -->
+    <!-- Toast & Limit Modal -->
     <div id="toast" class="toast hidden"></div>
     <div id="limit-modal" class="modal hidden">
         <div class="modal-content glass-card">
             <h2>Daily Limit Reached</h2>
-            <p>You have used all free searches for today.</p>
+            <p>Upgrade to Pro for unlimited searches.</p>
             <button onclick="closeModal()" class="btn-secondary">Close</button>
         </div>
     </div>
