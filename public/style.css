@@ -1,0 +1,24 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: #e2e8f0; }
+
+.glass-card {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(0, 245, 255, 0.2);
+    border-radius: 16px;
+}
+
+.auth-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0a0a0a, #1a1a2e); z-index: 1000; }
+
+.auth-card { background: rgba(15,23,42,0.95); padding: 3rem; border-radius: 20px; border: 1px solid rgba(0,245,255,0.3); text-align: center; width: 100%; max-width: 420px; }
+
+.btn-primary { width: 100%; padding: 14px; background: linear-gradient(90deg, #00f5ff, #0891b2); color: black; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin: 1rem 0; }
+
+.risk-badge.low { background: #22c55e; color: black; }
+.risk-badge.medium { background: #eab308; color: black; }
+.risk-badge.high { background: #ef4444; color: white; }
+
+.results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.info-card, .summary-card { padding: 1.5rem; }
+
+.toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1e2937; padding: 16px 28px; border-radius: 12px; border-left: 5px solid #00f5ff; z-index: 9999; }
