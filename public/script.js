@@ -1,11 +1,8 @@
 const API_BASE = "/api";
-let currentUser = null;
-let token = null;
 
 function showToast(msg, type = 'success') {
     const toast = document.getElementById('toast');
     toast.textContent = msg;
-    toast.style.borderLeftColor = type === 'error' ? '#ef4444' : '#22c55e';
     toast.style.display = 'block';
     setTimeout(() => toast.style.display = 'none', 3000);
 }
@@ -22,22 +19,19 @@ async function login() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
         });
+
         const data = await res.json();
 
-        if (!res.ok) throw new Error(data.msg || "Login failed");
+        if (!res.ok) throw new Error(data.msg || "Invalid credentials");
 
-        token = data.token;
-        currentUser = data.user;
-
-        localStorage.setItem('osintx_token', token);
-        localStorage.setItem('osintx_user', JSON.stringify(currentUser));
+        localStorage.setItem('osintx_token', data.token);
+        localStorage.setItem('osintx_user', JSON.stringify(data.user));
 
         showToast("Login Successful!", 'success');
-        setTimeout(() => {
-            document.getElementById('auth-screen').classList.add('hidden');
-            document.getElementById('main-app').classList.remove('hidden');
-            document.getElementById('user-name').textContent = currentUser.name;
-        }, 500);
+
+        document.getElementById('auth-screen').classList.add('hidden');
+        document.getElementById('main-app').classList.remove('hidden');
+
     } catch (e) {
         showToast(e.message, 'error');
     }
@@ -57,6 +51,7 @@ async function signup() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, password })
         });
+
         const data = await res.json();
 
         if (!res.ok) throw new Error(data.msg || "Signup failed");
@@ -76,11 +71,6 @@ function switchToSignup() {
 function switchToLogin() {
     document.getElementById('signup-form').classList.remove('active');
     document.getElementById('login-form').classList.add('active');
-}
-
-function logout() {
-    localStorage.clear();
-    location.reload();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
