@@ -12,12 +12,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// MongoDB
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log("✅ MongoDB Connected"))
-    .catch(err => console.error("MongoDB Error:", err));
+    .catch(err => console.log("MongoDB Error:", err));
 
-// User Schema
 const userSchema = new mongoose.Schema({
     name: String,
     email: { type: String, unique: true },
@@ -29,7 +27,6 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-// Auth Middleware
 const auth = (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     if (!token) return res.status(401).json({ msg: 'No token' });
@@ -41,7 +38,6 @@ const auth = (req, res, next) => {
     }
 };
 
-// Routes
 app.post('/api/signup', async (req, res) => {
     const { name, email, password } = req.body;
     try {
@@ -77,7 +73,7 @@ app.post('/api/login', async (req, res) => {
         }
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-        res.json({ token, user: { name: user.name, email: user.email, plan: user.plan, searchesToday: user.searchesToday } });
+        res.json({ token, user: { name: user.name, email: user.email, plan: user.plan } });
     } catch (err) {
         res.status(500).json({ msg: 'Server error' });
     }
@@ -92,8 +88,7 @@ app.get('/api/search', auth, async (req, res) => {
     }
 
     try {
-        const EXTERNAL_API = process.env.EXTERNAL_API_URL;
-        const apiRes = await fetch(`${EXTERNAL_API}?type=mobile&term=${number}`);
+        const apiRes = await fetch(`${process.env.EXTERNAL_API_URL}?type=mobile&term=${number}`);
         const data = await apiRes.json();
 
         user.searchesToday += 1;
