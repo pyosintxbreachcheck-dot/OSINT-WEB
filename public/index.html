@@ -18,20 +18,40 @@
                 </div>
                 <p class="tagline">Advanced Phone Intelligence Platform</p>
 
+                <!-- Login -->
                 <div id="login-form" class="auth-form active">
                     <h2>Login</h2>
-                    <div class="input-group"><label>Email</label><input type="email" id="login-email" placeholder="you@example.com"></div>
-                    <div class="input-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••"></div>
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" id="login-email" placeholder="you@example.com">
+                    </div>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="login-password" placeholder="••••••••">
+                    </div>
                     <button onclick="login()" class="btn-primary">LOGIN</button>
                     <p class="switch-auth">No account? <span onclick="switchToSignup()">Sign up</span></p>
                 </div>
 
+                <!-- Signup -->
                 <div id="signup-form" class="auth-form">
                     <h2>Sign Up</h2>
-                    <div class="input-group"><label>Full Name</label><input type="text" id="signup-name" placeholder="John Doe"></div>
-                    <div class="input-group"><label>Email</label><input type="email" id="signup-email" placeholder="you@example.com"></div>
-                    <div class="input-group"><label>Password</label><input type="password" id="signup-password" placeholder="••••••••"></div>
-                    <div class="input-group"><label>Confirm Password</label><input type="password" id="signup-confirm" placeholder="••••••••"></div>
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" id="signup-name" placeholder="John Doe">
+                    </div>
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" id="signup-email" placeholder="you@example.com">
+                    </div>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="signup-password" placeholder="••••••••">
+                    </div>
+                    <div class="input-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="signup-confirm" placeholder="••••••••">
+                    </div>
                     <button onclick="signup()" class="btn-primary">CREATE ACCOUNT</button>
                     <p class="switch-auth">Have account? <span onclick="switchToLogin()">Login</span></p>
                 </div>
@@ -40,46 +60,10 @@
     </div>
 
     <div id="main-app" class="main-app hidden">
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo"><i class="fas fa-shield-alt"></i><span>OSINTX AI</span></div>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="#" onclick="navigate('search')" class="nav-item active"><i class="fas fa-search"></i> Phone Search</a>
-            </nav>
-            <button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
-        </div>
-
+        <div class="sidebar">Sidebar content...</div>
         <div class="main-content">
-            <div class="top-nav">
-                <div class="user-info">
-                    <div id="plan-badge" class="plan-badge">FREE</div>
-                    <span id="user-name">User</span>
-                </div>
-            </div>
-
-            <div id="search-section" class="content-section active">
-                <h1 class="page-title">Phone Number Intelligence</h1>
-                <div class="search-input-container">
-                    <div class="input-wrapper">
-                        <input type="tel" id="phone-input" maxlength="10" placeholder="Enter 10-digit number">
-                        <button onclick="analyzeNumber()" class="btn-analyze">ANALYZE</button>
-                    </div>
-                </div>
-
-                <div id="results-container" class="results-container hidden">
-                    <button onclick="clearResults()" class="btn-close">×</button>
-                    <div class="result-header">
-                        <div class="number-display" id="result-number"></div>
-                        <div id="risk-score" class="risk-badge medium">MEDIUM RISK</div>
-                    </div>
-                    <div class="results-grid"></div>
-                    <div class="summary-card glass-card">
-                        <h3>Summary</h3>
-                        <p id="ai-summary"></p>
-                    </div>
-                </div>
-            </div>
+            <h1>Welcome to OSINTX AI</h1>
+            <p>Login successful! This is dashboard.</p>
         </div>
     </div>
 
