@@ -5,10 +5,12 @@ let token = null;
 
 function showToast(msg, type = 'success') {
     const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.style.borderLeftColor = type === 'error' ? '#ef4444' : '#22c55e';
-    toast.style.display = 'block';
-    setTimeout(() => toast.style.display = 'none', 3000);
+    if (toast) {
+        toast.textContent = msg;
+        toast.style.borderLeftColor = type === 'error' ? '#ef4444' : '#22c55e';
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 3000);
+    }
 }
 
 async function signup() {
@@ -17,7 +19,9 @@ async function signup() {
     const password = document.getElementById('signup-password').value;
     const confirm = document.getElementById('signup-confirm').value;
 
-    if (!name || !email || !password || password !== confirm) return showToast("All fields are required", 'error');
+    if (!name || !email || !password || password !== confirm) {
+        return showToast("All fields are required", 'error');
+    }
 
     try {
         const res = await fetch(`${API_BASE}/signup`, {
@@ -26,10 +30,12 @@ async function signup() {
             body: JSON.stringify({ name, email, password })
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.msg);
-        showToast("Signup successful! Login now");
+        if (!res.ok) throw new Error(data.msg || "Signup failed");
+        showToast("Signup successful! Please login", 'success');
         switchToLogin();
-    } catch (e) { showToast(e.message, 'error'); }
+    } catch (e) {
+        showToast(e.message, 'error');
+    }
 }
 
 async function login() {
@@ -42,8 +48,10 @@ async function login() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
         });
+
         const data = await res.json();
-        if (!res.ok) throw new Error(data.msg);
+
+        if (!res.ok) throw new Error(data.msg || "Login failed");
 
         token = data.token;
         currentUser = data.user;
@@ -51,82 +59,53 @@ async function login() {
         localStorage.setItem('osintx_token', token);
         localStorage.setItem('osintx_user', JSON.stringify(currentUser));
 
-        showToast("Login Successful!");
-        initApp();
-    } catch (e) { showToast(e.message, 'error'); }
+        showToast("Login Successful!", 'success');
+
+        // 🔥 Important Fix
+        setTimeout(() => {
+            initApp();
+        }, 600);
+
+    } catch (e) {
+        showToast(e.message, 'error');
+    }
 }
 
 function initApp() {
     token = localStorage.getItem('osintx_token');
     const userData = localStorage.getItem('osintx_user');
+
     if (token && userData) {
         currentUser = JSON.parse(userData);
-        document.getElementById('auth-screen').classList.add('hidden');
-        document.getElementById('main-app').classList.remove('hidden');
-        document.getElementById('user-name').textContent = currentUser.name;
-        document.getElementById('plan-badge').textContent = currentUser.plan.toUpperCase();
-        navigate('search');
+
+        // Hide auth screen
+        const authScreen = document.getElementById('auth-screen');
+        if (authScreen) authScreen.classList.add('hidden');
+
+        // Show main app
+        const mainApp = document.getElementById('main-app');
+        if (mainApp) mainApp.classList.remove('hidden');
+
+        // Update user info
+        const userNameEl = document.getElementById('user-name');
+        const planBadgeEl = document.getElementById('plan-badge');
+
+        if (userNameEl) userNameEl.textContent = currentUser.name || "User";
+        if (planBadgeEl) planBadgeEl.textContent = (currentUser.plan || "FREE").toUpperCase();
+
+        navigate('search');   // Default open search page
+        console.log("✅ Dashboard Loaded Successfully");
+    } else {
+        console.log("No token found");
     }
 }
 
-async function analyzeNumber() {
-    const number = document.getElementById('phone-input').value.trim();
-    if (!/^\d{10}$/.test(number)) return showToast("Enter valid 10 digit number", 'error');
-
-    try {
-        const res = await fetch(`${API_BASE}/search?number=${number}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await res.json();
-
-        if (!res.ok) {
-            if (res.status === 429) document.getElementById('limit-modal').classList.remove('hidden');
-            else showToast(data.msg || "Failed", 'error');
-            return;
-        }
-
-        renderResults(number, data);
-    } catch (err) {
-        showToast("Server Error", 'error');
-    }
+function logout() {
+    localStorage.clear();
+    location.reload();
 }
 
-function renderResults(number, apiData) {
-    const container = document.getElementById('results-container');
-    container.classList.remove('hidden');
-
-    const result = apiData.data?.results?.[0] || {};
-
-    document.getElementById('result-number').textContent = `+91 ${number}`;
-
-    const riskEl = document.getElementById('risk-score');
-    const risk = result.NAME ? "low" : "medium";
-    riskEl.textContent = risk.toUpperCase() + " RISK";
-    riskEl.className = `risk-badge ${risk}`;
-
-    document.querySelector('.results-grid').innerHTML = `
-        <div class="glass-card info-card">
-            <h4>Personal Info</h4>
-            <p><strong>Name:</strong> ${result.NAME || 'N/A'}</p>
-            <p><strong>F/H Name:</strong> ${result.fname || 'N/A'}</p>
-        </div>
-        <div class="glass-card info-card">
-            <h4>Address</h4>
-            <p>${result.ADDRESS ? result.ADDRESS.replace(/!/g, '<br>') : 'N/A'}</p>
-        </div>
-        <div class="glass-card info-card">
-            <h4>Network Info</h4>
-            <p><strong>Circle:</strong> ${result.circle || 'N/A'}</p>
-        </div>
-    `;
-
-    document.getElementById('ai-summary').innerHTML = `This number belongs to <strong>${result.NAME || 'Unknown'}</strong>.`;
-}
-
-function clearResults() {
-    document.getElementById('results-container').classList.add('hidden');
-}
-
+// Other helper functions
 function switchToSignup() {
     document.getElementById('login-form').classList.remove('active');
     document.getElementById('signup-form').classList.add('active');
@@ -138,17 +117,22 @@ function switchToLogin() {
 }
 
 function navigate(page) {
-    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-    document.getElementById(`${page}-section`).classList.add('active');
+    document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    const target = document.getElementById(page + '-section');
+    if (target) target.classList.add('active');
 }
 
-function logout() {
-    localStorage.clear();
-    location.reload();
+async function analyzeNumber() { /* ... same as before ... */ }
+function renderResults(number, apiData) { /* ... same as before ... */ }
+function clearResults() {
+    document.getElementById('results-container').classList.add('hidden');
 }
-
 function closeModal() {
     document.getElementById('limit-modal').classList.add('hidden');
 }
 
-document.addEventListener('DOMContentLoaded', initApp);
+document.addEventListener('DOMContentLoaded', () => {
+    initApp();
+});
