@@ -9,7 +9,7 @@ function showToast(msg, type = 'success') {
     toast.textContent = msg;
     toast.style.borderLeftColor = type === 'error' ? '#ef4444' : '#22c55e';
     toast.style.display = 'block';
-    setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    setTimeout(() => toast.style.display = 'none', 3000);
 }
 
 async function signup() {
@@ -57,9 +57,7 @@ async function login() {
         localStorage.setItem('osintx_user', JSON.stringify(currentUser));
 
         showToast("Login Successful!", 'success');
-
-        // Force refresh after login
-        setTimeout(initApp, 800);
+        setTimeout(initApp, 700);
 
     } catch (e) {
         showToast(e.message, 'error');
@@ -74,17 +72,14 @@ function initApp() {
         token = savedToken;
         currentUser = JSON.parse(savedUser);
 
-        // Hide Auth Screen
         document.getElementById('auth-screen').classList.add('hidden');
-        // Show Main App
         document.getElementById('main-app').classList.remove('hidden');
 
-        // Update UI
         document.getElementById('user-name').textContent = currentUser.name || "User";
         document.getElementById('plan-badge').textContent = (currentUser.plan || "FREE").toUpperCase();
 
-        navigate('search');   // Go to search page
-        console.log("✅ App Loaded Successfully on Render");
+        navigate('search');
+        console.log("✅ Dashboard Loaded");
     }
 }
 
@@ -109,10 +104,9 @@ function navigate(page) {
     if (section) section.classList.add('active');
 }
 
-// Search Functions
 async function analyzeNumber() {
     const number = document.getElementById('phone-input').value.trim();
-    if (!/^\d{10}$/.test(number)) return showToast("10 digit number daalo", 'error');
+    if (!/^\d{10}$/.test(number)) return showToast("Enter valid 10 digit number", 'error');
 
     try {
         const res = await fetch(`${API_BASE}/search?number=${number}`, {
@@ -147,7 +141,7 @@ function renderResults(number, apiData) {
         <div class="glass-card info-card">
             <h4>Personal Info</h4>
             <p><strong>Name:</strong> ${result.NAME || 'N/A'}</p>
-            <p><strong>F/H:</strong> ${result.fname || 'N/A'}</p>
+            <p><strong>F/H Name:</strong> ${result.fname || 'N/A'}</p>
         </div>
         <div class="glass-card info-card">
             <h4>Address</h4>
@@ -166,5 +160,4 @@ function closeModal() {
     document.getElementById('limit-modal').classList.add('hidden');
 }
 
-// Initialize
 document.addEventListener('DOMContentLoaded', initApp);
