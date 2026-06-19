@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSINTX AI - Advanced Phone Intelligence</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Auth Screen -->
+    <div id="auth-screen" class="auth-screen active">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="logo"><i class="fas fa-shield-alt"></i><h1>OSINTX AI</h1></div>
+                <p class="tagline">Advanced Phone Intelligence Platform</p>
+
+                <div id="login-form" class="auth-form active">
+                    <h2>Welcome Back</h2>
+                    <div class="input-group"><label>Email</label><input type="email" id="login-email" placeholder="you@example.com"></div>
+                    <div class="input-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••"></div>
+                    <button onclick="login()" class="btn-primary">Login</button>
+                    <p class="switch-auth">Don't have an account? <span onclick="switchToSignup()">Sign up</span></p>
+                </div>
+
+                <div id="signup-form" class="auth-form">
+                    <h2>Create Account</h2>
+                    <div class="input-group"><label>Full Name</label><input type="text" id="signup-name" placeholder="John Doe"></div>
+                    <div class="input-group"><label>Email</label><input type="email" id="signup-email" placeholder="you@example.com"></div>
+                    <div class="input-group"><label>Password</label><input type="password" id="signup-password" placeholder="••••••••"></div>
+                    <div class="input-group"><label>Confirm Password</label><input type="password" id="signup-confirm" placeholder="••••••••"></div>
+                    <button onclick="signup()" class="btn-primary">Create Account</button>
+                    <p class="switch-auth">Already have an account? <span onclick="switchToLogin()">Login</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="main-app" class="main-app hidden">
+        <div class="sidebar">
+            <div class="sidebar-header"><div class="logo"><i class="fas fa-shield-alt"></i><span>OSINTX AI</span></div></div>
+            <nav class="sidebar-nav">
+                <a href="#" onclick="navigate('dashboard')" class="nav-item active" id="nav-dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="#" onclick="navigate('search')" class="nav-item" id="nav-search"><i class="fas fa-search"></i> Phone Search</a>
+                <a href="#" onclick="navigate('history')" class="nav-item" id="nav-history"><i class="fas fa-history"></i> History</a>
+                <a href="#" onclick="navigate('profile')" class="nav-item" id="nav-profile"><i class="fas fa-user"></i> Profile</a>
+            </nav>
+            <button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+
+        <div class="main-content">
+            <div class="top-nav">
+                <div class="user-info">
+                    <div id="plan-badge" class="plan-badge">FREE</div>
+                    <span id="user-name">User</span>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div id="search-section" class="content-section active">
+                <h1 class="page-title">Phone Number Intelligence</h1>
+                <div class="search-input-container">
+                    <div class="input-wrapper">
+                        <input type="tel" id="phone-input" maxlength="10" placeholder="Enter 10-digit Indian mobile number">
+                        <button onclick="analyzeNumber()" class="btn-analyze">ANALYZE NUMBER</button>
+                    </div>
+                </div>
+
+                <div id="results-container" class="results-container hidden">
+                    <button onclick="clearResults()" class="btn-close">×</button>
+                    <div class="result-header">
+                        <div class="number-display" id="result-number">+91 9876543210</div>
+                        <div id="risk-score" class="risk-badge medium">MEDIUM RISK</div>
+                    </div>
+                    <div class="results-grid"></div>
+                    <div class="summary-card glass-card">
+                        <h3>AI Intelligence Summary</h3>
+                        <p id="ai-summary"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="limit-modal" class="modal hidden">
+        <div class="modal-content glass-card">
+            <h2>Daily Limit Reached</h2>
+            <p>Upgrade to Pro for unlimited searches.</p>
+            <button onclick="closeModal()" class="btn-secondary">Close</button>
+        </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
